@@ -1,0 +1,29 @@
+{
+  "name": "consumer_sqs_example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "sls offline -s local",
+    "test": "mocha --reporter list --timeout 100000"
+  },
+  "keywords": [],
+  "author": "Miguel Pazo <https://miguelpazo.com>",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.825.0",
+    "dateformat": "^3.0.3",
+    "elasticsearch": "^16.7.2",
+    "mongodb": "^3.6.5",
+    "ua-parser-js": "^0.7.28"
+  },
+  "devDependencies": {
+    "ajv": "^7.0.3",
+    "ajv-keywords": "^4.0.0",
+    "chai": "^4.2.0",
+    "delay": "^4.4.0",
+    "mocha": "^8.2.1",
+    "serverless": "^2.47.0",
+    "serverless-offline": "^7.0.0"
+  }
+}

@@ -1,0 +1,39 @@
+service: consumer-sqs-example
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128
+  timeout: 10
+  profile: sls_credentials
+  region: ${file(./env/params-${self:custom.stage}.yml):app.region}
+  vpc: ${file(./env/params-${self:custom.stage}.yml):vpc}
+  environment:
+    NODE_ENV: 'production'
+    APP_ENV: ${file(./env/params-${self:custom.stage}.yml):app.env}
+    DOCUMENTDB_HOST: ${file(./env/params-${self:custom.stage}.yml):databases.documentdb.host}
+    DOCUMENTDB_USERNAME: ${file(./env/params-${self:custom.stage}.yml):databases.documentdb.username}
+    DOCUMENTDB_PASSWORD: ${file(./env/params-${self:custom.stage}.yml):databases.documentdb.password}
+    DOCUMENTDB_DATABASE: ${file(./env/params-${self:custom.stage}.yml):databases.documentdb.database}
+    ELASTICSEARCH_HOST: ${file(./env/params-${self:custom.stage}.yml):databases.elasticsearch.host}
+    ELASTICSEARCH_USER: ${file(./env/params-${self:custom.stage}.yml):databases.elasticsearch.user}
+    ELASTICSEARCH_PASSWORD: ${file(./env/params-${self:custom.stage}.yml):databases.elasticsearch.password}
+    ELASTICSEARCH_INDEX: ${file(./env/params-${self:custom.stage}.yml):databases.elasticsearch.index}
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  serverless-offline:
+    httpPort: 3032
+    prefix: ""
+    noPrependStageInUrl: true
+
+functions:
+  stats:
+    handler: index.handler
+    reservedConcurrency: ${file(./env/params-${self:custom.stage}.yml):app.reservedConcurrency}
+    events:
+      - sqs: ${file(./env/params-${self:custom.stage}.yml):queue.sqs.arn}
+
+plugins:
+  - serverless-offline
